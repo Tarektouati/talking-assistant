@@ -1,0 +1,21 @@
+name: Build and push docker image
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Build image
+        run: docker build -t tarektouati/talking-assistant .
+
+      - name: Login to DockerHub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u tarektouati --password-stdin
+
+      - name: Push docker image to DockerHub
+        run: docker push tarektouati/talking-assistant
