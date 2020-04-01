@@ -36,8 +36,3 @@ All environment variables are **required** and there's no default configuration
 | ASSISTANT_HOST           | Hostname of your vocal assistant                  |
 | ASSISTANT_LANG           | Language for your vocal assistant                 |
 | ASSISTANT_ACCENT         | Accent for your vocal assistant                   |
-
-## TODOs
-
-- Unit test
-- Add support for other brokers

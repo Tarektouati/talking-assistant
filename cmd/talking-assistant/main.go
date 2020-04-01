@@ -2,13 +2,23 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"log"
+	"os"
 
 	"github.com/evalphobia/google-home-client-go/googlehome"
 	"github.com/tarektouati/talking-assistant/pkg/broker"
 	"github.com/tarektouati/talking-assistant/pkg/broker/amqp"
-	"github.com/tarektouati/talking-assistant/pkg/shared"
 )
+
+//getEnvWithError func returns error if the env is not found
+func getEnvWithError(env string) (string, error) {
+	envValue, found := os.LookupEnv(env)
+	if !found {
+		return "", fmt.Errorf("%s env not found", env)
+	}
+	return envValue, nil
+}
 
 func getBrokerInstance(name string) (broker.Broker, error) {
 	switch name {
@@ -20,15 +30,15 @@ func getBrokerInstance(name string) (broker.Broker, error) {
 }
 
 func createAssitantClient() (*googlehome.Client, error) {
-	host, err := shared.GetEnvWithError("ASSISTANT_HOST")
+	host, err := getEnvWithError("ASSISTANT_HOST")
 	if err != nil {
 		return nil, err
 	}
-	lang, err := shared.GetEnvWithError("ASSISTANT_LANG")
+	lang, err := getEnvWithError("ASSISTANT_LANG")
 	if err != nil {
 		return nil, err
 	}
-	accent, err := shared.GetEnvWithError("ASSISTANT_ACCENT")
+	accent, err := getEnvWithError("ASSISTANT_ACCENT")
 	if err != nil {
 		return nil, err
 	}
@@ -46,7 +56,7 @@ func startApp() error {
 	}
 	log.Printf("Connected to Assistant")
 
-	givenBroker, err := shared.GetEnvWithError("BROKER")
+	givenBroker, err := getEnvWithError("BROKER")
 	if err != nil {
 		return err
 	}
