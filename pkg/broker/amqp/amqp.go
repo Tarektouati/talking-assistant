@@ -1,9 +1,7 @@
 package amqp
 
 import (
-	"fmt"
 	"log"
-	"os"
 
 	"github.com/streadway/amqp"
 	"github.com/tarektouati/talking-assistant/pkg/broker"
@@ -15,25 +13,8 @@ type Client struct {
 	QueueName        string
 }
 
-//getEnvWithError func returns error if the env is not found
-func getEnvWithError(env string) (string, error) {
-	envValue, found := os.LookupEnv(env)
-	if !found {
-		return "", fmt.Errorf("%s env not found", env)
-	}
-	return envValue, nil
-}
-
 //NewClient creates a new Client for amqp broker
-func NewClient() (broker.Broker, error) {
-	connectionString, err := getEnvWithError("BROKER_CONNECTION_STRING")
-	if err != nil {
-		return nil, err
-	}
-	queue, err := getEnvWithError("BROKER_QUEUE")
-	if err != nil {
-		return nil, err
-	}
+func NewClient(connectionString string, queue string) (broker.Broker, error) {
 
 	client := &Client{
 		ConnectionString: connectionString,

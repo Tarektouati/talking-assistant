@@ -21,9 +21,17 @@ func getEnvWithError(env string) (string, error) {
 }
 
 func getBrokerInstance(name string) (broker.Broker, error) {
+	connectionString, err := getEnvWithError("BROKER_CONNECTION_STRING")
+	if err != nil {
+		return nil, err
+	}
+	queue, err := getEnvWithError("BROKER_QUEUE")
+	if err != nil {
+		return nil, err
+	}
 	switch name {
 	case "amqp":
-		return amqp.NewClient()
+		return amqp.NewClient(connectionString, queue)
 	default:
 		return nil, errors.New("Unknown broken")
 	}
